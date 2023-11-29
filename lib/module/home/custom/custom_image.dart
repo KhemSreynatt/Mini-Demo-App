@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CustomImage extends StatelessWidget {
@@ -19,46 +18,42 @@ class CustomImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugInvertOversizedImages = true;
     return Container(
-      padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Colors.grey.withOpacity(0.2),
-        ),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => ontap!(),
-            child: SizedBox(
-              height: 130,
-              width: 140,
-              child: CachedNetworkImage(
-                imageUrl: "$image",
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () => ontap!(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 1,
+                  color: Colors.grey.withOpacity(0.2),
+                ),
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                    image: ResizeImage(
+                      NetworkImage('$image'),
+                      width: MediaQuery.of(context).size.width.toInt(),
                     ),
-                  ),
+                    fit: BoxFit.cover),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 5, left: 10),
+              child: Text(
+                '$title $id',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Text(
-            '$title $id',
-            style: const TextStyle(
-                color: Colors.black, fontSize: 16, fontWeight: FontWeight.w700),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
